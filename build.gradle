@@ -2,7 +2,6 @@ plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2019.1.1"
 }
-
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
