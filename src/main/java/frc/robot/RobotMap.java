@@ -7,9 +7,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.SPI;
-import frc.team2890libs.*;
-import frc.team2890libs.frclib.*;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
+import io.github.pseudoresonance.pixy2api.*;
+import io.github.pseudoresonance.pixy2api.links.*;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -36,21 +37,17 @@ public class RobotMap {
 
   public static final double BATTERY_CAPACITY_WATT_HOUR = 18.0*12.0;
 
-  //
-  // Vision subsystem.
-  //
-  public static final int PIXYCAM_WIDTH = 320;
-  public static final int PIXYCAM_HEIGHT = 200;
-  public static final int PIXY_BRIGHTNESS = 80;
-  public static final double PIXY_CAM_OFFSET = 8.0;
-  public static final PixyVision.Orientation PIXY_ORIENTATION = PixyVision.Orientation.NORMAL_LANDSCAPE;
-  public static final SPI.Port PIXYCAM_SPI_PORT = FRCPixyCam.DEF_SPI_PORT;
-  public static final int PIXY_TARGET_SIGNATURE = 1;
+  //Pixy2 api taken from https://github.com/PseudoResonance/Pixy2JavaAPI
 
-  public static PixyVision pixy;
+  public static Pixy2 pixyCam;
+
+  public static SPILink pixySPILink;
 
   public static void init()
   {
-    pixy = new PixyVision("PixyCam", PIXY_TARGET_SIGNATURE, PIXY_BRIGHTNESS, PIXY_ORIENTATION, PIXYCAM_SPI_PORT);
+    pixySPILink = new SPILink();
+    pixySPILink.open(0);
+
+    pixyCam = new Pixy2(pixySPILink);
   }
 }
