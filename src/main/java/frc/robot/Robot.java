@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import java.awt.Color;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -128,7 +126,11 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() 
   {
+<<<<<<< HEAD
     
+=======
+    System.out.println(RobotMap.pixy.getTargetInfo());
+>>>>>>> parent of 2291757... Removed Team492 libs. Added PseudoResonance libs. IT WORKS.git add .!
     Scheduler.getInstance().run();
   }
 
