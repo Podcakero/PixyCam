@@ -120,7 +120,8 @@ public class Robot extends TimedRobot
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    RobotMap.pixyCam.setLamp((byte)255, (byte)0);
+
+    RobotMap.arduino.enableTermination();
   }
 
   /**
@@ -129,11 +130,6 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() 
   {  
-    int pixyCode = RobotMap.pixyCam.getCCC().getBlocks(true, 1, 1);
-
-    if (pixyCode == 18)
-      System.out.println(RobotMap.pixyCam.getCCC().getBlocks().get(0).getX());
-    
     Scheduler.getInstance().run();
   }
 

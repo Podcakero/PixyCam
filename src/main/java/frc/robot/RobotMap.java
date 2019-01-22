@@ -9,8 +9,7 @@ package frc.robot;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import io.github.pseudoresonance.pixy2api.*;
-import io.github.pseudoresonance.pixy2api.links.*;
+import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -37,17 +36,10 @@ public class RobotMap {
 
   public static final double BATTERY_CAPACITY_WATT_HOUR = 18.0*12.0;
 
-  //Pixy2 api taken from https://github.com/PseudoResonance/Pixy2JavaAPI
-
-  public static Pixy2 pixyCam;
-
-  public static SPILink pixySPILink;
+  public static SerialPort arduino;
 
   public static void init()
   {
-    pixySPILink = new SPILink();
-    pixySPILink.open(0);
-
-    pixyCam = new Pixy2(pixySPILink);
+    arduino = new SerialPort(115200, SerialPort.Port.kUSB);
   }
 }
