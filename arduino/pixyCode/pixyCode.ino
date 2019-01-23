@@ -21,6 +21,9 @@
 //
   
 #include <Pixy2.h>
+#include "Adafruit_VL6180X.h"
+
+Adafruit_VL6180X vl = Adafruit_VL6180X();
 
 // This is the main Pixy object 
 Pixy2 pixy;
@@ -35,23 +38,53 @@ void setup()
 
 void loop()
 { 
-  int i; 
+  float lux = vl.readLux(VL6180X_ALS_GAIN_5);
+
+  uint8_t range = vl.readRange();
+  uint8_t status = vl.readRangeStatus();
+  
   // grab blocks!
   pixy.ccc.getBlocks();
+
+  bool stage1Done = false;
+  bool stage2Done = false;
+  bool stage3Done = false;
   
   // If there are detect blocks, print them!
   if (pixy.ccc.numBlocks >= 2)
   {
-    //String[] outputs = new String[];
-    //Serial.print("Detected ");
-    //Serial.println(pixy.ccc.numBlocks);
-    for (i = 0; i < pixy.ccc.numBlocks; i++)
+    if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
+      Serial.println(pixy.ccc.blocks[0].m_width - pixy.ccc.blocks[1].m_width);
+    else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
+      Serial.println(pixy.ccc.blocks[1].m_width - pixy.ccc.blocks[0].m_width);
+    else if (pixy.ccc.blocks[1].m_width == pixy.ccc.blocks[0].m_width)
     {
-      Serial.print(pixy.ccc.blocks[i].m_width);
-      Serial.print(":");
-      Serial.println(pixy.ccc.blocks[i].m_height);
+      if (!stage1Done)
+      {
+        Serial.println("Done");
+        stage1Done = true;
+      }
+      if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
+      {
+        if (!stage2done)
+        {
+          Serial.println("Done");
+          stage2Done = true;
+        }
+        if (range >= 100)
+          Serial.println(range);
+        else
+        {
+          if (!stage3Done)
+          {
+            Serial.println("Done");
+            stage3Done = true;
+          }
+        }
+          
+      }
+      else
+        Serial.println((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2);
     }
-
-    Serial.println("end");
   }
 }
