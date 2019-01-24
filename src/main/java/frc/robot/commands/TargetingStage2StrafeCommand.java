@@ -10,9 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 
-public class TargetingStage1RotationCommand extends Command 
+public class TargetingStage2StrafeCommand extends Command 
 {
-  public TargetingStage1RotationCommand() 
+  public TargetingStage2StrafeCommand() 
   {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -29,7 +29,7 @@ public class TargetingStage1RotationCommand extends Command
   @Override
   protected void execute() 
   {
-    RobotMap.driveTrainSubsystem.arcadeDrive(0, Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, 0);
+    RobotMap.driveTrainSubsystem.arcadeDrive(0, 0, Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER);
   }
 
   // Make this return true when this Command no longer needs to run execute()

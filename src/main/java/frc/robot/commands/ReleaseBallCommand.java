@@ -7,16 +7,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import frc.robot.RobotMap;
 
-public class TargetingStage1RotationCommand extends Command 
+/**
+ * Add your docs here.
+ */
+public class ReleaseBallCommand extends TimedCommand 
 {
-  public TargetingStage1RotationCommand() 
+  /**
+   * Add your docs here.
+   */
+  public ReleaseBallCommand(double timeout) 
   {
+    super(timeout);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(RobotMap.driveTrainSubsystem);
+    requires(RobotMap.manipulatorSubsystem);
   }
 
   // Called just before this Command runs the first time
@@ -29,17 +36,10 @@ public class TargetingStage1RotationCommand extends Command
   @Override
   protected void execute() 
   {
-    RobotMap.driveTrainSubsystem.arcadeDrive(0, Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, 0);
+    RobotMap.manipulatorSubsystem.spinIntake(RobotMap.MANIPULATOR_DEFAULT_SPEED);
   }
 
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() 
-  {
-    return RobotMap.arduino.readString().equals("done");
-  }
-
-  // Called once after isFinished returns true
+  // Called once after timeout
   @Override
   protected void end() 
   {

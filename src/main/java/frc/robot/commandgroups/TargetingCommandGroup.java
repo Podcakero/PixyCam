@@ -7,14 +7,17 @@
 
 package frc.robot.commandgroups;
 
+import frc.robot.RobotMap;
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class TargetingCommandGroup extends CommandGroup 
 {
   /**
-   * Add your docs here.
+   * @param level The level to which the elevator should raise
+   * @param cargo Whether or not we are depositing cargo. True if yes, false if doing hatches
    */
-  public TargetingCommandGroup() 
+  public TargetingCommandGroup(int level, boolean cargo) 
   {
     // Add Commands here:
     // e.g. addSequential(new Command1());
@@ -32,5 +35,18 @@ public class TargetingCommandGroup extends CommandGroup
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+
+    addSequential(new TargetingStage1RotationCommand());
+    addSequential(new TargetingStage2StrafeCommand());
+    addSequential(new TargetingStage3RangefinderCommand());
+    addSequential(new LowerElevatorCommand());
+    addSequential(new RaiseElevatorCommand(level, cargo));
+
+    if (cargo)
+      addSequential(new ReleaseBallCommand(RobotMap.MANIPULATOR_TIME_TO_RELEASE_CARGO));
+    else
+      addSequential(new ReleaseHatchCommand());
+
+    addSequential(new LowerElevatorCommand());
   }
 }

@@ -10,13 +10,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 
-public class TargetingStage1RotationCommand extends Command 
+public class LowerElevatorCommand extends Command 
 {
-  public TargetingStage1RotationCommand() 
+  public LowerElevatorCommand() 
   {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(RobotMap.driveTrainSubsystem);
+    requires(RobotMap.elevatorSubsystem);
   }
 
   // Called just before this Command runs the first time
@@ -29,14 +29,14 @@ public class TargetingStage1RotationCommand extends Command
   @Override
   protected void execute() 
   {
-    RobotMap.driveTrainSubsystem.arcadeDrive(0, Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, 0);
+    RobotMap.elevatorSubsystem.elevatorDown();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() 
   {
-    return RobotMap.arduino.readString().equals("done");
+    return RobotMap.elevatorSubsystem.getEncoderPosition() == 0;
   }
 
   // Called once after isFinished returns true
