@@ -27,6 +27,7 @@ Adafruit_VL6180X vl = Adafruit_VL6180X();
 
 // This is the main Pixy object 
 Pixy2 pixy;
+int count = 0;
 
 void setup()
 {
@@ -50,41 +51,45 @@ void loop()
   bool stage2Done = false;
   bool stage3Done = false;
   
-  // If there are detect blocks, print them!
-  if (pixy.ccc.numBlocks >= 2)
+  //Don't flood the serial with data
+  if (count % 100 == 0)
   {
-    if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
-      Serial.println(pixy.ccc.blocks[0].m_width - pixy.ccc.blocks[1].m_width);
-    else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
-      Serial.println(pixy.ccc.blocks[1].m_width - pixy.ccc.blocks[0].m_width);
-    else if (pixy.ccc.blocks[1].m_width == pixy.ccc.blocks[0].m_width)
+    // If there are detect blocks, print them!
+    if (pixy.ccc.numBlocks >= 2)
     {
-      if (!stage1Done)
+      if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
+        Serial.println(pixy.ccc.blocks[0].m_width - pixy.ccc.blocks[1].m_width);
+      else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
+        Serial.println(pixy.ccc.blocks[1].m_width - pixy.ccc.blocks[0].m_width);
+      else if (pixy.ccc.blocks[1].m_width == pixy.ccc.blocks[0].m_width)
       {
-        Serial.println("Done");
-        stage1Done = true;
-      }
-      if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
-      {
-        if (!stage2done)
+        if (!stage1Done)
         {
           Serial.println("Done");
-          stage2Done = true;
+          stage1Done = true;
         }
-        if (range >= 100)
-          Serial.println(range);
-        else
+        if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
         {
-          if (!stage3Done)
+          if (!stage2done)
           {
             Serial.println("Done");
-            stage3Done = true;
+            stage2Done = true;
           }
+          if (range >= 100)
+            Serial.println(range);
+          else
+          {
+            if (!stage3Done)
+            {
+              Serial.println("Done");
+              stage3Done = true;
+            }
+          }
+            
         }
-          
+        else
+          Serial.println((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2);
       }
-      else
-        Serial.println((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2);
     }
   }
 }
