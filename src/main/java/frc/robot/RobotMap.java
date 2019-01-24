@@ -77,6 +77,8 @@ public class RobotMap {
   public static final double HATCH_HOLDER_SERVO_RELEASE = 0.5;
   public static final double HATCH_FOLDER_SERVO_GRAB = 0.0;
 
+  public static final double MOTOR_STOP_VALUE = 0.0;
+
   public static final double MAX_VELOCITY = 17.5;
   public static final double kV = 1.0 / MAX_VELOCITY;
 

@@ -12,31 +12,43 @@ import frc.robot.RobotMap;
 
 public class TargetingStage3RangefinderCommand extends Command 
 {
+  private String data;
+  private String newData;
+
   public TargetingStage3RangefinderCommand() 
   {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(RobotMap.driveTrainSubsystem);
+    
+    data = "";
+    newData = "";
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() 
   {
+    newData = RobotMap.arduino.readString();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() 
   {
-    RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, 0, 0);
+    if (!data.equals(newData))
+    {
+      RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, 0, 0);
+      data = newData;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() 
   {
-    return RobotMap.arduino.readString().equals("done");
+    newData = RobotMap.arduino.readString();
+    return newData.equals("done");
   }
 
   // Called once after isFinished returns true
