@@ -80,7 +80,7 @@ void loop()
         }
         if (((x1 + x2) / 2) == 200)
         {
-          if (!stage2done)
+          if (!stage2Done)
           {
             Serial.println("Done");
             stage2Done = true;
@@ -107,6 +107,5 @@ void loop()
         }
       }
     }
+     count += 1;
   }
-  count++;
-}

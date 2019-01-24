@@ -70,7 +70,7 @@ void loop()
         }
         if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
         {
-          if (!stage2done)
+          if (!stage2Done)
           {
             Serial.println("Done");
             stage2Done = true;
