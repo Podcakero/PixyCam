@@ -36,11 +36,14 @@ public class TargetingStage1RotationCommand extends Command
   @Override
   protected void execute() 
   {
+    //System.out.print("Stage1\t");
+    //System.out.println("Data: " + data + "\tnewData: " + newData);
     if (!data.equals(newData))
     {
       RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.MOTOR_STOP_VALUE, Double.parseDouble(newData) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, RobotMap.MOTOR_STOP_VALUE);
       data = newData;
     }
+    //System.out.println("Data: " + data + "\tnewData: " + newData);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -48,7 +51,9 @@ public class TargetingStage1RotationCommand extends Command
   protected boolean isFinished() 
   {
     newData = RobotMap.arduino.readString();
-    return newData.equals("done");
+    System.out.println("IsFinished newData: " + newData + "I");
+    System.out.println(newData.equalsIgnoreCase("Done"));
+    return newData.equals("Done");
   }
 
   // Called once after isFinished returns true

@@ -36,6 +36,8 @@ public class TargetingStage2StrafeCommand extends Command
   @Override
   protected void execute() 
   {
+    System.out.print("Stage2\t");
+    System.out.println("Data: " + data + "\tnewData: " + newData);
     if (!data.equals(newData))
     {
       RobotMap.driveTrainSubsystem.arcadeDrive(0, 0, Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER);
@@ -48,7 +50,8 @@ public class TargetingStage2StrafeCommand extends Command
   protected boolean isFinished() 
   {
     newData = RobotMap.arduino.readString();
-    return newData.equals("done");
+    System.out.println("IsFinished newData: " + newData);
+    return newData.equalsIgnoreCase("Done");
   }
 
   // Called once after isFinished returns true

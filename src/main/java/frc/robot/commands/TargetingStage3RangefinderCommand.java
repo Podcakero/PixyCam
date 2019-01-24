@@ -36,6 +36,8 @@ public class TargetingStage3RangefinderCommand extends Command
   @Override
   protected void execute() 
   {
+    System.out.println("stage3\t");
+    System.out.println("Data: " + data + "\tnewData: " + newData);
     if (!data.equals(newData))
     {
       RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, 0, 0);
@@ -48,7 +50,8 @@ public class TargetingStage3RangefinderCommand extends Command
   protected boolean isFinished() 
   {
     newData = RobotMap.arduino.readString();
-    return newData.equals("done");
+    System.out.println("IsFinished newData: " + newData);
+    return newData.equalsIgnoreCase("Done");
   }
 
   // Called once after isFinished returns true

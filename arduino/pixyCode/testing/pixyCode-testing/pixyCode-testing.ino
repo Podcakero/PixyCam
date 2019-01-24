@@ -36,10 +36,19 @@ int width2 = 30;
 int x1 = 0;
 int x2 = 300;
 
+bool stage1Done = false;
+bool stage2Done = false;
+bool stage3Done = false;
+
 void setup()
 {
   Serial.begin(115200);
   //Serial.print("Starting...\n");
+
+  while(!Serial)
+  {
+    ;
+  }
   
   //pixy.init();
 }
@@ -48,51 +57,39 @@ void loop()
 { 
   //float lux = vl.readLux(VL6180X_ALS_GAIN_5);
 
-  range -= 10;
+  //range -= 10;
   
   // grab blocks!
   //pixy.ccc.getBlocks();
-
-  bool stage1Done = false;
-  bool stage2Done = false;
-  bool stage3Done = false;
   
   //Don't flood the serial with data
-  if (count % 100 == 0)
+  if (count % 100 == 0 && count >= 10000)
   {
     // If there are detect blocks, print them!
     //if (pixy.ccc.numBlocks >= 2)
     //{
-      if (x1 > x2)
-        Serial.println(width1 - width2);
-      else if (x2 > x1)
+      if (width2 == width1)
       {
-        Serial.println(width2 - width1);
-        width2 += 20;
-        width1 -= 20;
-      }
-      else if (width2 == width1)
-      {
-        if (!stage1Done)
+        if (stage1Done == false)
         {
           Serial.println("Done");
           stage1Done = true;
         }
-        if (((x1 + x2) / 2) == 200)
+        else if (((x1 + x2) / 2) == 200)
         {
-          if (!stage2Done)
+          if (stage2Done == false)
           {
             Serial.println("Done");
             stage2Done = true;
           }
-          if (range >= 5)
+          else if (range >= 5)
           {
             Serial.println(range);
             range -= 10;
           }
           else
           {
-            if (!stage3Done)
+            if (stage3Done == false)
             {
               Serial.println("Done");
               stage3Done = true;
@@ -106,6 +103,14 @@ void loop()
           x2 += 10;
         }
       }
+      else if (x1 > x2)
+        Serial.println(width1 - width2);
+      else if (x2 > x1)
+      {
+        Serial.println(width2 - width1);
+        width2 += 20;
+        width1 -= 20;
+      }
     }
-     count += 1;
+    count += 1;
   }

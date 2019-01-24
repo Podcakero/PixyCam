@@ -115,8 +115,6 @@ public class RobotMap {
 
   public static void init()
   {
-    arduino = new SerialPort(115200, SerialPort.Port.kUSB);
-
     driveTrainSubsystem = new DriveTrainSubsystem();
     elevatorSubsystem = new ElevatorSubsystem();
     manipulatorSubsystem = new ManipulatorSubsystem();
