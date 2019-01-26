@@ -51,7 +51,9 @@ public class TargetingStage2StrafeCommand extends Command
   {
     newData = RobotMap.arduino.readString();
     System.out.println("IsFinished newData: " + newData);
-    return newData.equalsIgnoreCase("Done");
+    if (newData.substring(0, 1).equals("D"))
+      return true;
+    return false;
   }
 
   // Called once after isFinished returns true

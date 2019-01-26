@@ -52,8 +52,13 @@ public class TargetingStage1RotationCommand extends Command
   {
     newData = RobotMap.arduino.readString();
     System.out.println("IsFinished newData: " + newData + "I");
-    System.out.println(newData.equalsIgnoreCase("Done"));
-    return newData.equals("Done");
+    if (newData.length() > 0)
+      if (newData.substring(0, 1).equals("D"))
+      {
+        System.out.println("Done");
+        return true;
+      }        
+      return false;
   }
 
   // Called once after isFinished returns true

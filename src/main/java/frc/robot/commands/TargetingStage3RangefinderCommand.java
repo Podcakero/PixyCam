@@ -51,7 +51,10 @@ public class TargetingStage3RangefinderCommand extends Command
   {
     newData = RobotMap.arduino.readString();
     System.out.println("IsFinished newData: " + newData);
-    return newData.equalsIgnoreCase("Done");
+    if (newData.length() > 0)
+      if (newData.substring(0, 1).equals("D"))
+        return true;
+    return false;
   }
 
   // Called once after isFinished returns true
