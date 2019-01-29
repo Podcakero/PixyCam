@@ -29,18 +29,18 @@ public class TargetingStage2StrafeCommand extends Command
   @Override
   protected void initialize() 
   {
-    newData = RobotMap.arduino.readString();
+    //newData = RobotMap.arduino.readString();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() 
   {
-    System.out.print("Stage2\t");
-    System.out.println("Data: " + data + "\tnewData: " + newData);
+    //System.out.print("Stage2\t");
+    //System.out.println("Data: " + data + "\tnewData: " + newData);
     if (!data.equals(newData))
     {
-      RobotMap.driveTrainSubsystem.arcadeDrive(0, 0, Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER);
+      RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP, Double.parseDouble(newData) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER);
       data = newData;
     }
   }
@@ -50,9 +50,12 @@ public class TargetingStage2StrafeCommand extends Command
   protected boolean isFinished() 
   {
     newData = RobotMap.arduino.readString();
-    System.out.println("IsFinished newData: " + newData);
-    if (newData.substring(0, 1).equals("D"))
-      return true;
+    if (newData.length() > 0)
+      if (newData.substring(0, 1).equals("D"))
+      {
+        System.out.println("Done");
+        return true;
+      }
     return false;
   }
 
@@ -60,6 +63,7 @@ public class TargetingStage2StrafeCommand extends Command
   @Override
   protected void end() 
   {
+    RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
   }
 
   // Called when another command which requires one or more of the same

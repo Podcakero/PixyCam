@@ -30,8 +30,8 @@
 int count = 0;
 int range = 1000;
 
-int width1 = 70;
-int width2 = 30;
+int width1 = 700;
+int width2 = 300;
 
 int x1 = 0;
 int x2 = 300;
@@ -99,8 +99,8 @@ void loop()
         else
         {
           Serial.println((x1 + x2) / 2);
-          x1 += 10;
-          x2 += 10;
+          x1 += 5;
+          x2 += 5;
         }
       }
       else if (x1 > x2)

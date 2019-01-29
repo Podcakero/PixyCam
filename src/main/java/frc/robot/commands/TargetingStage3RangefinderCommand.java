@@ -36,11 +36,11 @@ public class TargetingStage3RangefinderCommand extends Command
   @Override
   protected void execute() 
   {
-    System.out.println("stage3\t");
-    System.out.println("Data: " + data + "\tnewData: " + newData);
+    //System.out.println("stage3\t");
+    //System.out.println("Data: " + data + "\tnewData: " + newData);
     if (!data.equals(newData))
     {
-      RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(RobotMap.arduino.readString()) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, 0, 0);
+      RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(newData) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
       data = newData;
     }
   }
@@ -53,7 +53,10 @@ public class TargetingStage3RangefinderCommand extends Command
     System.out.println("IsFinished newData: " + newData);
     if (newData.length() > 0)
       if (newData.substring(0, 1).equals("D"))
+      {
+        System.out.println("Done");
         return true;
+      }
     return false;
   }
 
@@ -61,6 +64,7 @@ public class TargetingStage3RangefinderCommand extends Command
   @Override
   protected void end() 
   {
+    RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
   }
 
   // Called when another command which requires one or more of the same

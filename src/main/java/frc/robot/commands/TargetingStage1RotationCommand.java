@@ -29,7 +29,7 @@ public class TargetingStage1RotationCommand extends Command
   @Override
   protected void initialize() 
   {
-    newData = RobotMap.arduino.readString();
+    //newData = RobotMap.arduino.readString();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -58,13 +58,14 @@ public class TargetingStage1RotationCommand extends Command
         System.out.println("Done");
         return true;
       }        
-      return false;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() 
   {
+    RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
   }
 
   // Called when another command which requires one or more of the same
