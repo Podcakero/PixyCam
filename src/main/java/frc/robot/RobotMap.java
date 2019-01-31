@@ -87,7 +87,9 @@ public class RobotMap {
   public static WPI_TalonSRX rightFrontTalon;
   public static WPI_TalonSRX leftBackTalon;
   public static WPI_TalonSRX rightBackTalon;
-  public static WPI_TalonSRX centralTalon;
+  //public static WPI_TalonSRX centralTalon;
+
+  public static CANSparkMax centralTalon;
 
   public static WPI_TalonSRX intakeTalon;
 
@@ -126,7 +128,9 @@ public class RobotMap {
     rightFrontTalon = new WPI_TalonSRX(RIGHT_FRONT_TALON_ID);
     leftBackTalon = new WPI_TalonSRX(LEFT_BACK_TALON_ID);
     rightBackTalon = new WPI_TalonSRX(RIGHT_BACK_TALON_ID);
-    centralTalon = new WPI_TalonSRX(CENTER_TALON_ID);
+    //centralTalon = new WPI_TalonSRX(CENTER_TALON_ID);
+
+    centralTalon = new CANSparkMax(CENTER_TALON_ID, MotorType.kBrushless);
 
     intakeTalon = new WPI_TalonSRX(INATKE_TALON_ID);
 
