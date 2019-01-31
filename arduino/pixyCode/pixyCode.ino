@@ -22,6 +22,7 @@
   
 #include <Pixy2.h>
 #include "Adafruit_VL6180X.h"
+#include <Adafruit_NeoPixel.h>
 
 Adafruit_VL6180X vl = Adafruit_VL6180X();
 
