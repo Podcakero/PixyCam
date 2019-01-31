@@ -60,11 +60,17 @@ public class RobotMap {
   public static final int DRIVETRAIN_ENCODER_TICKS_PER_REVOLUTION = 42;
   public static final int DRIVETRAIN_WHEEL_DIAMETER = 4;
 
-  public static final double DRIVETRAIN_SPEED_MODIFIER = 0.5;
+  public static final double DRIVETRAIN_SPEED_MODIFIER = 1.0;
   public static final double DRIVETRAIN_FULL_SPEED = 1.0;
   public static final double DRIVETRAIN_FULL_STOP = 0.0;
+<<<<<<< HEAD
   public static final double DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER = 100.0; //What the value returned by the arduino will be divided by to determine speed
   public static final double DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER = 1000.0; //The modifier that the rangefinder value will be divided by to determine speed
+=======
+  public static final double DRIVETRAIN_STRAFE_SPEED_MODIFIER = 0.3;
+  public static final double DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER = 10.0; //What the value returned by the arduino will be divided by to determine speed
+  public static final double DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER = 100.0; //The modifier that the rangefinder value will be divided by to determine speed
+>>>>>>> 334bdf4a3f6cd7301bf365e716ab43f44e622fe8
 
   public static final double ELEVATOR_SPEED_MODIFIER = 1.0;
   public static final double ELEVATOR_FULL_SPEED = 1.0;
