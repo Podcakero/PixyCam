@@ -14,7 +14,6 @@ import frc.robot.RobotMap;
 public class TargetingStage2StrafeCommand extends Command 
 {
   private String data;
-  private String newData;
 
   public TargetingStage2StrafeCommand() 
   {
@@ -23,7 +22,6 @@ public class TargetingStage2StrafeCommand extends Command
     requires(RobotMap.driveTrainSubsystem);
 
     data = "";
-    newData = "";
   }
 
   // Called just before this Command runs the first time
@@ -37,16 +35,9 @@ public class TargetingStage2StrafeCommand extends Command
   @Override
   protected void execute() 
   {
-    //System.out.print("Stage2\t");
-    //System.out.println("Data: " + data + "\tnewData: " + newData);
     if (data.length() > 0)
-    {
       if (FormatChecker.canParseDouble(data))
-      {
-        System.out.println("newData");
         RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP, -Double.parseDouble(data) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_STRAFE_SPEED_MODIFIER);
-      }
-    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -54,13 +45,9 @@ public class TargetingStage2StrafeCommand extends Command
   protected boolean isFinished() 
   {
     data = RobotMap.arduino.readString();
-    System.out.println("IsFinished newData: " + data + "I");
     if (data.length() > 0)
       if (data.substring(0, 1).equals("D"))
-      {
-        System.out.println("Done");
         return true;
-      }
     return false;
   }
 

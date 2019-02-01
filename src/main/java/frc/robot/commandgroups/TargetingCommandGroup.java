@@ -37,9 +37,7 @@ public class TargetingCommandGroup extends CommandGroup
     // arm.
 
     addSequential(new TargetingStage2StrafeCommand());
-    //System.out.println("Stage2 Done");
     addSequential(new TargetingStage3RangefinderCommand());
-    //PSystem.out.println("Stage3 Done");
     /*addSequential(new LowerElevatorCommand());
     addSequential(new RaiseElevatorCommand(level, cargo));
 

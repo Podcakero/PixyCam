@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import components.utilities.FormatChecker;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 
@@ -29,40 +30,26 @@ public class TargetingStage3RangefinderCommand extends Command
   @Override
   protected void initialize() 
   {
-    newData = RobotMap.arduino.readString();
+    data = RobotMap.arduino.readString();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() 
   {
-    //System.out.println("stage3\t");
-    //System.out.println("Data: " + data + "\tnewData: " + newData);
-    if (newData.length() > 0)
-    {
-      if (!newData.substring(0, 1).equals("e"))
-      {
-        if (!data.equals(newData))
-        {
-          RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(newData) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
-          data = newData;
-        }
-      }
-    }
+    if (data.length() > 0)
+      if (FormatChecker.canParseDouble(data))
+        RobotMap.driveTrainSubsystem.arcadeDrive( Double.parseDouble(data) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() 
   {
-    newData = RobotMap.arduino.readString();
-    System.out.println("IsFinished newData: " + newData);
+    data = RobotMap.arduino.readString();
     if (newData.length() > 0)
       if (newData.substring(0, 1).equals("D"))
-      {
-        System.out.println("Done");
         return true;
-      }
     return false;
   }
 
