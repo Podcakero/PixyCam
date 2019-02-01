@@ -39,7 +39,7 @@ public class TargetingStage1RotationCommand extends Command
     //System.out.println("Data: " + data + "\tnewData: " + newData);4
     if (data.length() > 0)
     {
-      if (!data.substring(0, 1).equals("e"))
+      if (!data.substring(0, 1).equalsIgnoreCase("e"))
       {
         System.out.println("newData");
         if (Double.parseDouble(data) < 0)

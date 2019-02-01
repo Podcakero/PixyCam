@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import components.utilities.FormatChecker;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.RobotMap;
 
@@ -40,8 +41,9 @@ public class TargetingStage2StrafeCommand extends Command
     //System.out.println("Data: " + data + "\tnewData: " + newData);
     if (data.length() > 0)
     {
-      if (!data.substring(0, 1).equals("e") || !data.substring(0, 1).equals("-"))
+      if (FormatChecker.canParseDouble(data))
       {
+        System.out.println("newData");
         RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP, -Double.parseDouble(data) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_STRAFE_SPEED_MODIFIER);
       }
     }
