@@ -12,85 +12,116 @@
 //
 // end license header
 //
-// This sketch is a good place to start if you're just getting started with 
-// Pixy and Arduino.  This program simply prints the detected object blocks 
-// (including color codes) through the serial console.  It uses the Arduino's 
+// This sketch is a good place to start if you're just getting started with
+// Pixy and Arduino.  This program simply prints the detected object blocks
+// (including color codes) through the serial console.  It uses the Arduino's
 // ICSP SPI port.  For more information go here:
 //
 // https://docs.pixycam.com/wiki/doku.php?id=wiki:v2:hooking_up_pixy_to_a_microcontroller_-28like_an_arduino-29
-//
-  
+// //
+
 #include <Pixy2.h>
+#include <Wire.h>
 #include "Adafruit_VL6180X.h"
-#include <Adafruit_NeoPixel.h>
+#include "Adafruit_NeoPixel.h"
+
+#define PIN 6
 
 Adafruit_VL6180X vl = Adafruit_VL6180X();
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(12, 6);
 
-// This is the main Pixy object 
+// This is the main Pixy object
 Pixy2 pixy;
 int count = 0;
+uint32_t pink = strip.Color(255, 20, 147);
+uint32_t teal = strip.Color(0, 128, 128);
 
 void setup()
 {
   Serial.begin(115200);
   Serial.print("Starting...\n");
-  
+
   pixy.init();
+
+  vl.begin();
+
+  strip.begin();
+
+  strip.show();
+
+  for (int i = 0; i < 12; i++)
+  {
+    strip.setPixelColor(i, pink);
+  }
 }
 
 void loop()
-{ 
+{
+  strip.show();
+
   float lux = vl.readLux(VL6180X_ALS_GAIN_5);
 
   uint8_t range = vl.readRange();
   uint8_t status = vl.readRangeStatus();
-  
+
   // grab blocks!
   pixy.ccc.getBlocks();
 
   bool stage1Done = false;
   bool stage2Done = false;
   bool stage3Done = false;
-  
-  //Don't flood the serial with data
-  if (count % 100 == 0)
+
+  // If there are detect blocks, print them!
+  if (pixy.ccc.numBlocks >= 2)
   {
-    // If there are detect blocks, print them!
-    if (pixy.ccc.numBlocks >= 2)
+    for (int i = 0; i < 12; i++)
     {
-      if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
-        Serial.println(pixy.ccc.blocks[0].m_width - pixy.ccc.blocks[1].m_width);
-      else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
-        Serial.println(pixy.ccc.blocks[1].m_width - pixy.ccc.blocks[0].m_width);
-      else if (pixy.ccc.blocks[1].m_width == pixy.ccc.blocks[0].m_width)
+      strip.setPixelColor(i, teal);
+      strip.show();
+    }
+
+    if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
+      Serial.println(pixy.ccc.blocks[0].m_width - pixy.ccc.blocks[1].m_width);
+    else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
+      Serial.println(pixy.ccc.blocks[1].m_width - pixy.ccc.blocks[0].m_width);
+    else if (pixy.ccc.blocks[1].m_width == pixy.ccc.blocks[0].m_width)
+    {
+      if (!stage1Done)
       {
-        if (!stage1Done)
+        Serial.println("Done");
+        stage1Done = true;
+      }
+      if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
+      {
+        if (!stage2Done)
         {
           Serial.println("Done");
-          stage1Done = true;
+          stage2Done = true;
         }
-        if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
+        if (range >= 100)
+          Serial.println(range);
+        else
         {
-          if (!stage2Done)
+          if (!stage3Done)
           {
             Serial.println("Done");
-            stage2Done = true;
+            stage3Done = true;
           }
-          if (range >= 100)
-            Serial.println(range);
-          else
-          {
-            if (!stage3Done)
-            {
-              Serial.println("Done");
-              stage3Done = true;
-            }
-          }
-            
         }
-        else
-          Serial.println((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2);
+
       }
+      else
+        Serial.println((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2);
     }
   }
+  else
+  {
+    for (int i = 0; i < 12; i++)
+    {
+      strip.setPixelColor(i, pink);
+    }
+    strip.show();
+  }
+
+  delay(100);
 }
