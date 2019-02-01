@@ -22,14 +22,13 @@ public class TargetingStage1RotationCommand extends Command
     requires(RobotMap.driveTrainSubsystem);
 
     data = "";
-    newData = "";
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() 
   {
-    //newData = RobotMap.arduino.readString();
+    data = RobotMap.arduino.readString();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -37,11 +36,17 @@ public class TargetingStage1RotationCommand extends Command
   protected void execute() 
   {
     //System.out.print("Stage1\t");
-    //System.out.println("Data: " + data + "\tnewData: " + newData);
-    if (!data.equals(newData))
+    //System.out.println("Data: " + data + "\tnewData: " + newData);4
+    if (data.length() > 0)
     {
-      RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.MOTOR_STOP_VALUE, Double.parseDouble(newData) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, RobotMap.MOTOR_STOP_VALUE);
-      data = newData;
+      if (!data.substring(0, 1).equals("e"))
+      {
+        System.out.println("newData");
+        if (Double.parseDouble(data) < 0)
+          RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.MOTOR_STOP_VALUE, -Math.sqrt(Math.abs(Double.parseDouble(data))) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, RobotMap.MOTOR_STOP_VALUE);
+        else
+          RobotMap.driveTrainSubsystem.arcadeDrive(RobotMap.MOTOR_STOP_VALUE, Math.sqrt(Math.abs(Double.parseDouble(data))) / RobotMap.DRIVETRAIN_CAMERA_TARGETING_SPEED_MODIFIER, RobotMap.MOTOR_STOP_VALUE);
+      }
     }
     //System.out.println("Data: " + data + "\tnewData: " + newData);
   }
@@ -50,10 +55,10 @@ public class TargetingStage1RotationCommand extends Command
   @Override
   protected boolean isFinished() 
   {
-    newData = RobotMap.arduino.readString();
-    System.out.println("IsFinished newData: " + newData + "I");
-    if (newData.length() > 0)
-      if (newData.substring(0, 1).equals("D"))
+    data = RobotMap.arduino.readString();
+    System.out.println("IsFinished newData: " + data + "I");
+    if (data.length() > 0)
+      if (data.substring(0, 1).equals("D"))
       {
         System.out.println("Done");
         return true;

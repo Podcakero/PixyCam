@@ -38,10 +38,16 @@ public class TargetingStage3RangefinderCommand extends Command
   {
     //System.out.println("stage3\t");
     //System.out.println("Data: " + data + "\tnewData: " + newData);
-    if (!data.equals(newData))
+    if (newData.length() > 0)
     {
-      RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(newData) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
-      data = newData;
+      if (!newData.substring(0, 1).equals("e"))
+      {
+        if (!data.equals(newData))
+        {
+          RobotMap.driveTrainSubsystem.arcadeDrive(Double.parseDouble(newData) / RobotMap.DRIVETRAIN_RANGEFINDER_TARGETING_SPEED_MODIFIER, RobotMap.DRIVETRAIN_FULL_STOP, RobotMap.DRIVETRAIN_FULL_STOP);
+          data = newData;
+        }
+      }
     }
   }
 

@@ -28,36 +28,49 @@
 #define PIN 6
 
 Adafruit_VL6180X vl = Adafruit_VL6180X();
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(12, 6);
+Adafruit_NeoPixel driverNotifier = Adafruit_NeoPixel(12, 6);
+Adafruit_NeoPixel cameraLight = Adafruit_NeoPixel(12, 5);
 
 // This is the main Pixy object
 Pixy2 pixy;
 int count = 0;
-uint32_t pink = strip.Color(255, 20, 147);
-uint32_t teal = strip.Color(0, 128, 128);
+bool stage1Done = true;
+bool stage2Done = false;
+bool stage3Done = false;
+
+uint32_t pink = driverNotifier.Color(255, 20, 147);
+uint32_t teal = driverNotifier.Color(0, 128, 128);
+uint32_t white = cameraLight.Color(255, 255, 255);
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.print("Starting...\n");
 
   pixy.init();
 
   vl.begin();
 
-  strip.begin();
-
-  strip.show();
+  driverNotifier.begin();
+  cameraLight.begin();
+  
+  driverNotifier.show();
+  cameraLight.show();
 
   for (int i = 0; i < 12; i++)
   {
-    strip.setPixelColor(i, pink);
+    driverNotifier.setPixelColor(i, pink);
   }
+
+  for (int i = 0; i < 12; i++)
+  {
+    cameraLight.setPixelColor(i, white);
+  }
+  cameraLight.show();
 }
 
 void loop()
 {
-  strip.show();
+  driverNotifier.show();
 
   float lux = vl.readLux(VL6180X_ALS_GAIN_5);
 
@@ -67,39 +80,32 @@ void loop()
   // grab blocks!
   pixy.ccc.getBlocks();
 
-  bool stage1Done = false;
-  bool stage2Done = false;
-  bool stage3Done = false;
-
   // If there are detect blocks, print them!
   if (pixy.ccc.numBlocks >= 2)
   {
     for (int i = 0; i < 12; i++)
     {
-      strip.setPixelColor(i, teal);
-      strip.show();
+      driverNotifier.setPixelColor(i, teal);
+      driverNotifier.show();
     }
 
-    if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
-      Serial.println(pixy.ccc.blocks[0].m_width - pixy.ccc.blocks[1].m_width);
-    else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
-      Serial.println(pixy.ccc.blocks[1].m_width - pixy.ccc.blocks[0].m_width);
-    else if (pixy.ccc.blocks[1].m_width == pixy.ccc.blocks[0].m_width)
+    if ((int)pixy.ccc.blocks[0].m_width - (int)pixy.ccc.blocks[1].m_width == 0|| stage1Done)
     {
       if (!stage1Done)
       {
         Serial.println("Done");
         stage1Done = true;
       }
-      if (((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2) == 200)
+      
+      if (((((int)pixy.ccc.blocks[0].m_x + (int)pixy.ccc.blocks[1].m_x) / 2) - 150) == 0 || stage2Done)
       {
         if (!stage2Done)
         {
           Serial.println("Done");
           stage2Done = true;
         }
-        if (range >= 100)
-          Serial.println(range);
+        if (range - 100 >= 0 && !stage3Done)
+          Serial.println(range - 100);
         else
         {
           if (!stage3Done)
@@ -108,20 +114,21 @@ void loop()
             stage3Done = true;
           }
         }
-
       }
       else
-        Serial.println((pixy.ccc.blocks[0].m_x + pixy.ccc.blocks[1].m_x) / 2);
+        Serial.println((((int)pixy.ccc.blocks[0].m_x + (int)pixy.ccc.blocks[1].m_x) / 2) - 150);
     }
+    else if (pixy.ccc.blocks[0].m_x > pixy.ccc.blocks[1].m_x)
+      Serial.println((int)pixy.ccc.blocks[0].m_width - (int)pixy.ccc.blocks[1].m_width);
+    else if (pixy.ccc.blocks[1].m_x > pixy.ccc.blocks[0].m_x)
+      Serial.println((int)pixy.ccc.blocks[1].m_width - (int)pixy.ccc.blocks[0].m_width);
   }
   else
   {
     for (int i = 0; i < 12; i++)
     {
-      strip.setPixelColor(i, pink);
+      driverNotifier.setPixelColor(i, pink);
     }
-    strip.show();
+    driverNotifier.show();
   }
-
-  delay(100);
 }
