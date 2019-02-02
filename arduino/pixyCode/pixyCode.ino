@@ -104,7 +104,7 @@ void loop()
           Serial.println("Done");
           stage2Done = true;
         }
-        if (range - 100 >= 0 && !stage3Done)
+        if (range - 150 >= 0 && !stage3Done)
           Serial.println(range - 100);
         else
         {
